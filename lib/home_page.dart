@@ -19,6 +19,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   late AnimationController _animationController;
   late AnimationController _buttonAnimationController;
   late Animation<double> _listAnimation;
+  late Animation<Offset> _OffSetAnimation;
   final List<String> items = List.generate(3, (index) => 'Item $index');
 
 
@@ -39,7 +40,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
 
     _animationController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 700),
     );
     _buttonAnimationController = AnimationController(
       vsync: this,
@@ -48,6 +49,9 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
 
     _listAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(_animationController);
     _animationController.forward();
+
+    _OffSetAnimation = Tween<Offset>(begin: const Offset(-1.0, 0.0), end: Offset.zero)
+        .animate(_animationController);
 
 
     ///counting animation
@@ -94,7 +98,9 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.primary,
-        title: Text(!isPlay ? 'Counting Animation' : "", style: const TextStyle(color: Colors.white)),
+        title: SlideTransition(
+            position: _OffSetAnimation,
+            child: Text(!isPlay ? 'Counting Animation' : "", style: const TextStyle(color: Colors.white))),
         actions: [
           IconButton(
               onPressed: toggleButton,
