@@ -100,7 +100,11 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
         backgroundColor: Theme.of(context).colorScheme.primary,
         title: SlideTransition(
             position: _OffSetAnimation,
-            child: Text(!isPlay ? 'Counting Animation' : "", style: const TextStyle(color: Colors.white))),
+            child: AnimatedOpacity(
+                opacity: !isPlay ? 1 : 0,
+                duration: const Duration(milliseconds: 600),
+                curve: Curves.easeInOut,
+                child: const Text('Counting Animation', style: TextStyle(color: Colors.white)))),
         actions: [
           IconButton(
               onPressed: toggleButton,
