@@ -17,12 +17,14 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   late List<AnimationController> controllers;
 
   late AnimationController _animationController;
+  late AnimationController _buttonAnimationController;
   late Animation<double> _listAnimation;
   final List<String> items = List.generate(3, (index) => 'Item $index');
 
 
   ///Second List Animation
   bool isAnimationStart = false;
+  bool isPlay = false;
 
 
   @override
@@ -36,6 +38,10 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     });
 
     _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 500),
+    );
+    _buttonAnimationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 500),
     );
@@ -75,13 +81,31 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     super.dispose();
   }
 
+  toggleButton() {
+    setState(() {
+      isPlay = !isPlay;
+      isPlay ? _buttonAnimationController.forward() : _buttonAnimationController.reverse();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.primary,
-        title: const Text('Counting Animation', style: TextStyle(color: Colors.white)),
+        title: Text(!isPlay ? 'Counting Animation' : "", style: const TextStyle(color: Colors.white)),
+        actions: [
+          IconButton(
+              onPressed: toggleButton,
+              iconSize: 30,
+              // splashColor: Colors.amber,
+              highlightColor: Theme.of(context).colorScheme.inversePrimary,
+              icon: AnimatedIcon(
+                color: Colors.white,
+                icon: AnimatedIcons.pause_play, progress: _buttonAnimationController,
+              ))
+        ],
       ),
       body: Container(
         padding: const EdgeInsets.all(16),
